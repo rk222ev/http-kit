@@ -8,14 +8,14 @@
            [org.httpkit HttpMethod PrefixThreadFactory HttpUtils]
            [java.util.concurrent ThreadPoolExecutor LinkedBlockingQueue TimeUnit]
            [java.net URI URLEncoder]
-           [org.httpkit.client SslContextFactory MultipartEntity]
-           javax.xml.bind.DatatypeConverter))
+           java.util.Base64
+           [org.httpkit.client SslContextFactory MultipartEntity]))
 
 ;;;; Utils
 
 (defn- utf8-bytes    [s]     (.getBytes         (str s) "utf8"))
 (defn url-encode     [s]     (URLEncoder/encode (str s) "utf8"))
-(defn- base64-encode [bytes] (DatatypeConverter/printBase64Binary bytes))
+(defn- base64-encode [bytes] (.encodeToString (Base64/getEncoder) bytes))
 
 (defn- basic-auth-value [basic-auth]
   (let [basic-auth (if (string? basic-auth)
