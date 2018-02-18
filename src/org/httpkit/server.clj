@@ -1,7 +1,7 @@
 (ns org.httpkit.server
   (:import [org.httpkit.server AsyncChannel HttpServer RingHandler ProxyProtocolOption]
            [org.httpkit.logger ContextLogger EventLogger EventNames]
-           javax.xml.bind.DatatypeConverter
+           java.util.Base64
            java.security.MessageDigest))
 
 ;;;; Ring server
@@ -155,8 +155,10 @@
 (defn sec-websocket-accept [sec-websocket-key]
   (let [md (MessageDigest/getInstance "SHA1")
         websocket-13-guid "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"]
-    (DatatypeConverter/printBase64Binary
-      (.digest md (.getBytes (str sec-websocket-key websocket-13-guid))))))
+    (.encodeToString
+     (Base64/getEncoder)
+     (.digest md (.getBytes (str sec-websocket-key websocket-13-guid))))))
+
 
 (def accept "DEPRECATED for `sec-websocket-accept" sec-websocket-accept)
 
